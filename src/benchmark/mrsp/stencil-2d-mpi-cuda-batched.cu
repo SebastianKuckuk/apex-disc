@@ -26,45 +26,45 @@ __global__ void packAndApplyBC(tpe *__restrict__ u, tpe *__restrict__ sendBuf[4]
     auto buf = sendBuf[dir];
 
     switch (dir) {
-        case 0:
-            if (mpi_x > 0) {
-                for (size_t y = idxStart; y < ny - 2; y += idxStride)
-                    buf[y] = u[(nx + 1) + y * nx];
-            } else {
-                for (size_t y = idxStart; y < ny - 2; y += idxStride)
-                    u[(y + 1) * nx] = 2 * (tpe)0 - u[(y + 1) * nx + 1];
-            }
-            break;
+    case 0:
+        if (mpi_x > 0) {
+            for (size_t y = idxStart; y < ny - 2; y += idxStride)
+                buf[y] = u[(nx + 1) + y * nx];
+        } else {
+            for (size_t y = idxStart; y < ny - 2; y += idxStride)
+                u[(y + 1) * nx] = 2 * (tpe)0 - u[(y + 1) * nx + 1];
+        }
+        break;
 
-        case 1:
-            if (mpi_x < mpi_nx - 1) {
-                for (size_t y = idxStart; y < ny - 2; y += idxStride)
-                    buf[y] = u[(nx + nx - 2) + y * nx];
-            } else {
-                for (size_t y = idxStart; y < ny - 2; y += idxStride)
-                    u[(y + 1) * nx + nx - 1] = 2 * (tpe)0 - u[(y + 1) * nx + nx - 2];
-            }
-            break;
+    case 1:
+        if (mpi_x < mpi_nx - 1) {
+            for (size_t y = idxStart; y < ny - 2; y += idxStride)
+                buf[y] = u[(nx + nx - 2) + y * nx];
+        } else {
+            for (size_t y = idxStart; y < ny - 2; y += idxStride)
+                u[(y + 1) * nx + nx - 1] = 2 * (tpe)0 - u[(y + 1) * nx + nx - 2];
+        }
+        break;
 
-        case 2:
-            if (mpi_y > 0) {
-                for (size_t x = idxStart; x < nx - 2; x += idxStride)
-                    buf[x] = u[(nx + 1) + x];
-            } else {
-                for (size_t x = idxStart; x < nx - 2; x += idxStride)
-                    u[x + 1] = 2 * (tpe)0 - u[nx + x + 1];
-            }
-            break;
+    case 2:
+        if (mpi_y > 0) {
+            for (size_t x = idxStart; x < nx - 2; x += idxStride)
+                buf[x] = u[(nx + 1) + x];
+        } else {
+            for (size_t x = idxStart; x < nx - 2; x += idxStride)
+                u[x + 1] = 2 * (tpe)0 - u[nx + x + 1];
+        }
+        break;
 
-        case 3:
-            if (mpi_y < mpi_ny - 1) {
-                for (size_t x = idxStart; x < nx - 2; x += idxStride)
-                    buf[x] = u[(ny - 2) * nx + 1 + x];
-            } else {
-                for (size_t x = idxStart; x < nx - 2; x += idxStride)
-                    u[(ny - 1) * nx + x + 1] = 2 * (tpe)0 - u[(ny - 2) * nx + x + 1];
-            }
-            break;
+    case 3:
+        if (mpi_y < mpi_ny - 1) {
+            for (size_t x = idxStart; x < nx - 2; x += idxStride)
+                buf[x] = u[(ny - 2) * nx + 1 + x];
+        } else {
+            for (size_t x = idxStart; x < nx - 2; x += idxStride)
+                u[(ny - 1) * nx + x + 1] = 2 * (tpe)0 - u[(ny - 2) * nx + x + 1];
+        }
+        break;
     }
 }
 
@@ -78,29 +78,29 @@ __global__ void unpack(tpe *__restrict__ u, tpe *__restrict__ recvBuf[4], const 
     auto buf = recvBuf[dir];
 
     switch (dir) {
-        case 0:
-            if (mpi_x > 0)
-                for (size_t y = idxStart; y < ny - 2; y += idxStride)
-                    u[nx + y * nx] = buf[y];
-            break;
+    case 0:
+        if (mpi_x > 0)
+            for (size_t y = idxStart; y < ny - 2; y += idxStride)
+                u[nx + y * nx] = buf[y];
+        break;
 
-        case 1:
-            if (mpi_x < mpi_nx - 1)
-                for (size_t y = idxStart; y < ny - 2; y += idxStride)
-                    u[nx + nx - 1 + y * nx] = buf[y];
-            break;
+    case 1:
+        if (mpi_x < mpi_nx - 1)
+            for (size_t y = idxStart; y < ny - 2; y += idxStride)
+                u[nx + nx - 1 + y * nx] = buf[y];
+        break;
 
-        case 2:
-            if (mpi_y > 0)
-                for (size_t x = idxStart; x < nx - 2; x += idxStride)
-                    u[1 + x] = buf[x];
-            break;
+    case 2:
+        if (mpi_y > 0)
+            for (size_t x = idxStart; x < nx - 2; x += idxStride)
+                u[1 + x] = buf[x];
+        break;
 
-        case 3:
-            if (mpi_y < mpi_ny - 1)
-                for (size_t x = idxStart; x < nx - 2; x += idxStride)
-                    u[(ny - 1) * nx + 1 + x] = buf[x];
-            break;
+    case 3:
+        if (mpi_y < mpi_ny - 1)
+            for (size_t x = idxStart; x < nx - 2; x += idxStride)
+                u[(ny - 1) * nx + 1 + x] = buf[x];
+        break;
     }
 }
 

@@ -37,8 +37,7 @@ inline tpe checkSolutionStencil2D(const tpe *const __restrict__ *const __restric
 
             for (size_t i1 = 2; i1 < ny - 2; ++i1) {
                 for (size_t i0 = 2; i0 < nx - 2; ++i0) {
-                    const tpe localRes = 4 * u[patch][i0 + i1 * nx] - u[patch][i0 + i1 * nx + 1] - u[patch][i0 + i1 * nx - 1]
-                                           - u[patch][i0 + nx * (i1 + 1)] - u[patch][i0 + nx * (i1 - 1)];
+                    const tpe localRes = 4 * u[patch][i0 + i1 * nx] - u[patch][i0 + i1 * nx + 1] - u[patch][i0 + i1 * nx - 1] - u[patch][i0 + nx * (i1 + 1)] - u[patch][i0 + nx * (i1 - 1)];
                     res += localRes * localRes;
                 }
             }
