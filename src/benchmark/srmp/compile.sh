@@ -23,3 +23,6 @@ nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fuse
 
 echo "Compiling CUDA Fused Direct Batched"
 nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fused-direct-batched stencil-2d-cuda-fused-direct-batched.cu
+
+echo "Compiling CUDA Fused Direct Stream Sync"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fused-direct-stream-sync stencil-2d-cuda-fused-direct-stream-sync.cu
