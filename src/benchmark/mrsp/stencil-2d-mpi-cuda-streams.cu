@@ -155,7 +155,7 @@ inline int realMain(int argc, char *argv[], MPI_Datatype MPI_TPE) {
     // measurement
     auto start = std::chrono::steady_clock::now();
 
-    for (size_t i = 0; i < nIt + 1; ++i)
+    for (size_t i = 0; i < nIt; ++i)
         performIteration(d_u, d_uNew, h_d_bufSend, h_d_bufRecv, nx, ny, mpi_rank, mpi_x, mpi_y, mpi_nx, mpi_ny, MPI_TPE, streams);
     checkCudaError(cudaDeviceSynchronize(), true);
 

@@ -111,7 +111,7 @@ inline int realMain(int argc, char *argv[]) {
     // measurement
     auto start = std::chrono::steady_clock::now();
 
-    for (size_t i = 0; i < nIt + 1; ++i)
+    for (size_t i = 0; i < nIt; ++i)
         performIteration(h_d_u, h_d_uNew, nx, ny, patch_nx, patch_ny);
     checkCudaError(cudaDeviceSynchronize(), true);
 
