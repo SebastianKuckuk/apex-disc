@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 export BUILD_DIR=../../../build/benchmark/mrsp
 mkdir -p $BUILD_DIR
