@@ -14,3 +14,12 @@ nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-patc
 
 echo "Compiling CUDA Multi Streams"
 nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-multi-streams stencil-2d-cuda-multi-streams.cu
+
+echo "Compiling CUDA Fused Direct"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fused-direct stencil-2d-cuda-fused-direct.cu
+
+echo "Compiling CUDA Fused Direct Streams"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fused-direct-streams stencil-2d-cuda-fused-direct-streams.cu
+
+echo "Compiling CUDA Fused Direct Batched"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fused-direct-batched stencil-2d-cuda-fused-direct-batched.cu

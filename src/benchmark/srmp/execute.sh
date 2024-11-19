@@ -7,7 +7,7 @@ export N_WARMUP=2
 module purge
 module load nvhpc openmpi
 
-for NX in 8192 4096 2048 1024; do
+for NX in 8192 2048 512 128; do
     NY=$NX
     PNX=$((8192 / $NX))
     PNY=$((8192 / $NY))
@@ -23,4 +23,16 @@ for NX in 8192 4096 2048 1024; do
     echo
     echo "Executing CUDA Multi Streams $PNX x $PNY : $NX x $NY"
     $BUILD_DIR/stencil-2d-cuda-multi-streams double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
+
+    echo
+    echo "Executing CUDA Fused Direct $PNX x $PNY : $NX x $NY"
+    $BUILD_DIR/stencil-2d-cuda-fused-direct double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
+
+    echo
+    echo "Executing CUDA Fused Direct Streams $PNX x $PNY : $NX x $NY"
+    $BUILD_DIR/stencil-2d-cuda-fused-direct-streams double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
+
+    echo
+    echo "Executing CUDA Fused Direct Batched $PNX x $PNY : $NX x $NY"
+    $BUILD_DIR/stencil-2d-cuda-fused-direct-batched double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
 done
