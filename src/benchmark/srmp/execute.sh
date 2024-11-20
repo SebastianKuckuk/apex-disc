@@ -39,4 +39,8 @@ for NX in 8192 2048 512 128; do
     echo
     echo "Executing CUDA Fused Direct Stream Sync $PNX x $PNY : $NX x $NY"
     $BUILD_DIR/stencil-2d-cuda-fused-direct-stream-sync double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
+
+    echo
+    echo "Executing CUDA Fused Direct OpenMP $PNX x $PNY : $NX x $NY"
+    $BUILD_DIR/stencil-2d-cuda-fused-direct-omp double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
 done

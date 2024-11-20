@@ -26,3 +26,6 @@ nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fuse
 
 echo "Compiling CUDA Fused Direct Stream Sync"
 nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fused-direct-stream-sync stencil-2d-cuda-fused-direct-stream-sync.cu
+
+echo "Compiling CUDA Fused Direct OpenMP"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -Xcompiler -fopenmp -o $BUILD_DIR/stencil-2d-cuda-fused-direct-omp stencil-2d-cuda-fused-direct-omp.cu
