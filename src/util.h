@@ -63,6 +63,22 @@ void parseCLA_2d(int argc, char* const* argv, char*& tpeName, size_t& nx, size_t
     ++i;
 }
 
+void parseCLA_2d(int argc, char* const* argv, char*& tpeName, size_t& nx, size_t& ny, size_t& nItWarmUp, size_t& nIt,
+                 unsigned int& mpi_nx, unsigned int& mpi_ny, unsigned int& patch_nx, unsigned int& patch_ny) {
+    parseCLA_2d(argc, argv, tpeName, nx, ny, nItWarmUp, nIt, mpi_nx, mpi_ny);
+    
+    // default values
+    patch_nx = 1;
+    patch_ny = 1;
+
+    // override with command line arguments
+    int i = 8;
+    if (argc > i) patch_nx = atoi(argv[i]);
+    ++i;
+    if (argc > i) patch_ny = atoi(argv[i]);
+    ++i;
+}
+
 void parseCLA_3d(int argc, char* const* argv, char*& tpeName, size_t& nx, size_t& ny, size_t& nz, size_t& nItWarmUp, size_t& nIt,
                  unsigned int& mpi_nx, unsigned int& mpi_ny, unsigned int& mpi_nz) {
     // default values
