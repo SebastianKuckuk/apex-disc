@@ -3,3 +3,7 @@ __pycache__
 .vscode
 
 build
+execute.sh.o*
+*.sqlite
+*.nsys-rep
+*.ncu-rep
