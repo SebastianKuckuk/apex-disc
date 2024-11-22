@@ -34,6 +34,19 @@ struct Patch {
 };
 
 template <typename tpe>
+struct DevicePatch {
+    tpe *d_u;
+    tpe *d_uNew;
+
+    NeighborType neighborType[4];
+    int neighborPatchIdx[4];
+    int neighborMpiRank[4];
+
+    tpe **d_d_bufSend;
+    tpe **d_d_bufRecv;
+};
+
+template <typename tpe>
 inline void initStencil2D(Patch<tpe>* patches, const size_t nx, const size_t ny, unsigned int numPatches) {
     for (auto p = 0; p < numPatches; ++p) {
         auto& patch = patches[p];
