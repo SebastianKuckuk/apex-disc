@@ -58,7 +58,7 @@ __global__ void stencil2d(const tpe *const __restrict__ *const __restrict__ u, t
 }
 
 template <typename tpe>
-inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, const size_t nx, const size_t ny,
+inline void performIteration(tpe **&d_d_u, tpe **&d_d_uNew, const size_t nx, const size_t ny,
                              int patch_nx, int patch_ny) {
 
     dim3 blockSize(16, 16);
@@ -67,11 +67,11 @@ inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, const size_t nx, con
     #pragma omp parallel for collapse(2) schedule(static) num_threads(patch_nx * patch_ny)
     for (auto py = 0; py < patch_ny; ++py)
         for (auto px = 0; px < patch_nx; ++px)
-            stencil2d<<<numBlocks, blockSize>>>(h_d_u, h_d_uNew, nx, ny, px, py, patch_nx, patch_ny);
+            stencil2d<<<numBlocks, blockSize>>>(d_d_u, d_d_uNew, nx, ny, px, py, patch_nx, patch_ny);
 
     checkCudaError(cudaDeviceSynchronize(), true);
 
-    std::swap(h_d_u, h_d_uNew);
+    std::swap(d_d_u, d_d_uNew);
 }
 
 template <typename tpe>

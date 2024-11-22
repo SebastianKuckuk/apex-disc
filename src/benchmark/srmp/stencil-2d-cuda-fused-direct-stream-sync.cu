@@ -58,7 +58,7 @@ __global__ void stencil2d(const tpe *const __restrict__ *const __restrict__ u, t
 }
 
 template <typename tpe>
-inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, const size_t nx, const size_t ny,
+inline void performIteration(tpe **&d_d_u, tpe **&d_d_uNew, const size_t nx, const size_t ny,
                              int patch_nx, int patch_ny, cudaStream_t *streams,
                              int it, cudaEvent_t *events) {
 
@@ -78,7 +78,7 @@ inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, const size_t nx, con
             if (py < patch_ny - 1 && it > 0)
                 checkCudaError(cudaStreamWaitEvent(streams[patch], events[(it - 1) * patch_nx * patch_ny + patch + patch_nx], 0));
 
-            stencil2d<<<numBlocks, blockSize, 0, streams[patch]>>>(h_d_u, h_d_uNew, nx, ny, px, py, patch_nx, patch_ny);
+            stencil2d<<<numBlocks, blockSize, 0, streams[patch]>>>(d_d_u, d_d_uNew, nx, ny, px, py, patch_nx, patch_ny);
 
             checkCudaError(cudaEventRecord(events[it * patch_nx * patch_ny + patch], streams[patch]));
         }
@@ -86,7 +86,7 @@ inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, const size_t nx, con
 
     // checkCudaError(cudaDeviceSynchronize(), true);
 
-    std::swap(h_d_u, h_d_uNew);
+    std::swap(d_d_u, d_d_uNew);
 }
 
 template <typename tpe>

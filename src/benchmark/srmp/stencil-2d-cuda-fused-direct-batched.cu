@@ -61,17 +61,17 @@ __global__ void stencil2d(const tpe *const __restrict__ *const __restrict__ u, t
 }
 
 template <typename tpe>
-inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, const size_t nx, const size_t ny,
+inline void performIteration(tpe **&d_d_u, tpe **&d_d_uNew, const size_t nx, const size_t ny,
                              int patch_nx, int patch_ny) {
 
     dim3 blockSize(16, 16, 1);
     dim3 numBlocks(ceilingDivide(nx - 2, blockSize.x), ceilingDivide(ny - 2, blockSize.y), ceilingDivide(patch_nx * patch_ny, blockSize.z));
 
-    stencil2d<<<numBlocks, blockSize>>>(h_d_u, h_d_uNew, nx, ny, patch_nx, patch_ny);
+    stencil2d<<<numBlocks, blockSize>>>(d_d_u, d_d_uNew, nx, ny, patch_nx, patch_ny);
 
     checkCudaError(cudaDeviceSynchronize(), true);
 
-    std::swap(h_d_u, h_d_uNew);
+    std::swap(d_d_u, d_d_uNew);
 }
 
 template <typename tpe>
@@ -118,14 +118,14 @@ inline int realMain(int argc, char *argv[]) {
 
     // warm-up
     for (size_t i = 0; i < nItWarmUp; ++i)
-        performIteration(h_d_u, h_d_uNew, nx, ny, patch_nx, patch_ny);
+        performIteration(d_d_u, d_d_uNew, nx, ny, patch_nx, patch_ny);
     checkCudaError(cudaDeviceSynchronize(), true);
 
     // measurement
     auto start = std::chrono::steady_clock::now();
 
     for (size_t i = 0; i < nIt; ++i)
-        performIteration(h_d_u, h_d_uNew, nx, ny, patch_nx, patch_ny);
+        performIteration(d_d_u, d_d_uNew, nx, ny, patch_nx, patch_ny);
     checkCudaError(cudaDeviceSynchronize(), true);
 
     auto end = std::chrono::steady_clock::now();
