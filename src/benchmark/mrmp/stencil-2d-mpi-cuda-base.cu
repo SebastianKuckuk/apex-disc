@@ -8,10 +8,10 @@
 
 template <typename tpe>
 __global__ void stencil2d(const tpe *const __restrict__ u, tpe *__restrict__ uNew, const size_t nx, const size_t ny) {
-    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x + 1;
+    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y + 1;
 
-    if (i0 >= 1 && i0 < nx - 1 && i1 >= 1 && i1 < ny - 1) {
+    if (i0 < nx - 1 && i1 < ny - 1) {
         uNew[i0 + i1 * nx] = 0.25 * u[i0 + i1 * nx + 1] + 0.25 * u[i0 + i1 * nx - 1] + 0.25 * u[i0 + nx * (i1 + 1)] + 0.25 * u[i0 + nx * (i1 - 1)];
     }
 }
@@ -22,7 +22,7 @@ inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, tpe ***h_h_d_bufSend
                              unsigned int patch_nx, unsigned int patch_ny) {
 
     dim3 blockSize(16, 16);
-    dim3 numBlocks(ceilingDivide(nx, blockSize.x), ceilingDivide(ny, blockSize.y));
+    dim3 numBlocks(ceilingDivide(nx - 2, blockSize.x), ceilingDivide(ny - 2, blockSize.y));
     int blockSize1D = 32;
 
     for (auto i = 0; i < 8 * patch_nx * patch_ny; ++i)

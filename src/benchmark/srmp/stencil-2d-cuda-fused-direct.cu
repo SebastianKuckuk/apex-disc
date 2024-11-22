@@ -7,13 +7,13 @@
 template <typename tpe>
 __global__ void stencil2d(const tpe *const __restrict__ *const __restrict__ u, tpe *__restrict__ *__restrict__ uNew, const size_t nx, const size_t ny,
                           const int px, const int py, const int patch_nx, const int patch_ny) {
-    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x + 1;
+    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y + 1;
 
     auto patch = px + py * patch_nx;
     auto uPatch = u[patch];
 
-    if (i0 >= 1 && i0 < nx - 1 && i1 >= 1 && i1 < ny - 1) {
+    if (i0 < nx - 1 && i1 < ny - 1) {
         tpe west, east, south, north;
 
         if (1 == i0) {
@@ -62,7 +62,7 @@ inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, const size_t nx, con
                              int patch_nx, int patch_ny) {
 
     dim3 blockSize(16, 16);
-    dim3 numBlocks(ceilingDivide(nx, blockSize.x), ceilingDivide(ny, blockSize.y));
+    dim3 numBlocks(ceilingDivide(nx - 2, blockSize.x), ceilingDivide(ny - 2, blockSize.y));
 
     for (auto py = 0; py < patch_ny; ++py)
         for (auto px = 0; px < patch_nx; ++px)

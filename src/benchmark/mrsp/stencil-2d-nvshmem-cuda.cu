@@ -11,10 +11,10 @@
 template <typename tpe>
 __global__ void stencil2d(const tpe *const __restrict__ u, tpe *__restrict__ uNew, const size_t nx, const size_t ny,
                           const int mpi_x, const int mpi_y, const int mpi_nx, const int mpi_ny) {
-    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x + 1;
+    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y + 1;
 
-    if (i0 >= 1 && i0 < nx - 1 && i1 >= 1 && i1 < ny - 1) {
+    if (i0 < nx - 1 && i1 < ny - 1) {
         tpe west, east, south, north;
 
         if (1 == i0) {
@@ -63,7 +63,7 @@ inline void performIteration(tpe *&d_u, tpe *&d_uNew, const size_t nx, const siz
                              int mpi_rank, int mpi_x, int mpi_y, int mpi_nx, int mpi_ny) {
 
     dim3 blockSize(16, 16);
-    dim3 numBlocks(ceilingDivide(nx, blockSize.x), ceilingDivide(ny, blockSize.y));
+    dim3 numBlocks(ceilingDivide(nx - 2, blockSize.x), ceilingDivide(ny - 2, blockSize.y));
 
     stencil2d<<<numBlocks, blockSize>>>(d_u, d_uNew, nx, ny, mpi_x, mpi_y, mpi_nx, mpi_ny);
     nvshmem_barrier_all();
@@ -118,9 +118,6 @@ inline int realMain(int argc, char *argv[], MPI_Datatype MPI_TPE) {
 
     checkCudaError(cudaMemcpy(d_u, u, sizeof(tpe) * nx * ny, cudaMemcpyHostToDevice));
     checkCudaError(cudaMemcpy(d_uNew, uNew, sizeof(tpe) * nx * ny, cudaMemcpyHostToDevice));
-
-    dim3 blockSize(16, 16);
-    dim3 numBlocks(ceilingDivide(nx, blockSize.x), ceilingDivide(ny, blockSize.y));
 
     // warm-up
     for (size_t i = 0; i < nItWarmUp; ++i)

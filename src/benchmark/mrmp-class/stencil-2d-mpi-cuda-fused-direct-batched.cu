@@ -27,14 +27,14 @@ __global__ void swapFields(Patch<tpe> *patches, unsigned int numPatches) {
 
 template <typename tpe>
 __global__ void stencil2d(Patch<tpe> *patches, const size_t nx, const size_t ny, unsigned int numPatches) {
-    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x + 1;
+    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y + 1;
     const int p = blockIdx.z * blockDim.z + threadIdx.z;
     auto& patch = patches[p];
     auto u = patches[p].d_u;
     auto uNew = patches[p].d_uNew;
 
-    if (i0 >= 1 && i0 < nx - 1 && i1 >= 1 && i1 < ny - 1) {
+    if (i0 < nx - 1 && i1 < ny - 1) {
         tpe west, east, south, north;
 
         if (i0 > 1) {
@@ -100,7 +100,7 @@ inline void performIteration(Patch<tpe> *patches, Patch<tpe> *d_patches, unsigne
                              int mpi_rank, int mpi_x, int mpi_y, int mpi_nx, int mpi_ny, MPI_Datatype MPI_TPE) {
 
     dim3 blockSize(16, 16, 1);
-    dim3 numBlocks(ceilingDivide(nx, blockSize.x), ceilingDivide(ny, blockSize.y), ceilingDivide(numPatches, blockSize.z));
+    dim3 numBlocks(ceilingDivide(nx - 2, blockSize.x), ceilingDivide(ny - 2, blockSize.y), ceilingDivide(numPatches, blockSize.z));
 
     stencil2d<<<numBlocks, blockSize>>>(d_patches, nx, ny, numPatches);
 

@@ -7,8 +7,8 @@
 template <typename tpe>
 __global__ void stencil2d(const tpe *const __restrict__ *const __restrict__ u, tpe *__restrict__ *__restrict__ uNew, const size_t nx, const size_t ny,
                           const int patch_nx, const int patch_ny) {
-    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x + 1;
+    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y + 1;
     const size_t patch = blockIdx.z * blockDim.z + threadIdx.z;
     
     auto px = patch % patch_nx;
@@ -16,7 +16,7 @@ __global__ void stencil2d(const tpe *const __restrict__ *const __restrict__ u, t
 
     auto uPatch = u[patch];
 
-    if (i0 >= 1 && i0 < nx - 1 && i1 >= 1 && i1 < ny - 1) {
+    if (i0 < nx - 1 && i1 < ny - 1) {
         tpe west, east, south, north;
 
         if (1 == i0) {
@@ -65,7 +65,7 @@ inline void performIteration(tpe **&h_d_u, tpe **&h_d_uNew, const size_t nx, con
                              int patch_nx, int patch_ny) {
 
     dim3 blockSize(16, 16, 1);
-    dim3 numBlocks(ceilingDivide(nx, blockSize.x), ceilingDivide(ny, blockSize.y), ceilingDivide(patch_nx * patch_ny, blockSize.z));
+    dim3 numBlocks(ceilingDivide(nx - 2, blockSize.x), ceilingDivide(ny - 2, blockSize.y), ceilingDivide(patch_nx * patch_ny, blockSize.z));
 
     stencil2d<<<numBlocks, blockSize>>>(h_d_u, h_d_uNew, nx, ny, patch_nx, patch_ny);
 

@@ -11,10 +11,10 @@ __global__ void stencil2d(const tpe *const __restrict__ u, tpe *__restrict__ uNe
                           tpe *__restrict__ *__restrict__ bufSend, tpe *__restrict__ *__restrict__ bufRecv,
                           const size_t nx, const size_t ny,
                           const int mpi_x, const int mpi_y, const int mpi_nx, const int mpi_ny) {
-    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t i0 = blockIdx.x * blockDim.x + threadIdx.x + 1;
+    const size_t i1 = blockIdx.y * blockDim.y + threadIdx.y + 1;
 
-    if (i0 >= 1 && i0 < nx - 1 && i1 >= 1 && i1 < ny - 1) {
+    if (i0 < nx - 1 && i1 < ny - 1) {
         tpe west, east, south, north;
 
         if (1 == i0) {
@@ -77,7 +77,7 @@ inline void performIteration(tpe *&d_u, tpe *&d_uNew, tpe *d_d_bufSend[4], tpe *
                              int mpi_rank, int mpi_x, int mpi_y, int mpi_nx, int mpi_ny, MPI_Datatype MPI_TPE) {
 
     dim3 blockSize(16, 16);
-    dim3 numBlocks(ceilingDivide(nx, blockSize.x), ceilingDivide(ny, blockSize.y));
+    dim3 numBlocks(ceilingDivide(nx - 2, blockSize.x), ceilingDivide(ny - 2, blockSize.y));
 
     MPI_Request reqs[] = {MPI_REQUEST_NULL, MPI_REQUEST_NULL, MPI_REQUEST_NULL, MPI_REQUEST_NULL,
                           MPI_REQUEST_NULL, MPI_REQUEST_NULL, MPI_REQUEST_NULL, MPI_REQUEST_NULL};
