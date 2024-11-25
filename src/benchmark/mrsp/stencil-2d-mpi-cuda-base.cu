@@ -159,7 +159,7 @@ inline int realMain(int argc, char *argv[], MPI_Datatype MPI_TPE) {
     auto end = std::chrono::steady_clock::now();
 
     if (0 == mpi_rank)
-        printStats<tpe>(end - start, nIt, nx * ny, tpeName, mpi_size * (sizeof(tpe) + sizeof(tpe)), mpi_size * 7);
+        printStats<tpe>(end - start, nIt, (nx - 2) * (ny - 2), tpeName, mpi_size * (sizeof(tpe) + sizeof(tpe)), mpi_size * 7);
 
     checkCudaError(cudaMemcpy(u, d_u, sizeof(tpe) * nx * ny, cudaMemcpyDeviceToHost));
     checkCudaError(cudaMemcpy(uNew, d_uNew, sizeof(tpe) * nx * ny, cudaMemcpyDeviceToHost));

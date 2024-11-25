@@ -130,7 +130,7 @@ inline int realMain(int argc, char *argv[]) {
 
     auto end = std::chrono::steady_clock::now();
 
-    printStats<tpe>(end - start, nIt, numPatches * nx * ny, tpeName, sizeof(tpe) + sizeof(tpe), 7);
+    printStats<tpe>(end - start, nIt, numPatches * (nx - 2) * (ny - 2), tpeName, sizeof(tpe) + sizeof(tpe), 7);
 
     for (auto i = 0; i < numPatches; ++i) {
         checkCudaError(cudaMemcpy(u[i], h_d_u[i], sizeof(tpe) * nx * ny, cudaMemcpyDeviceToHost));

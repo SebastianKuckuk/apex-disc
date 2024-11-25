@@ -303,7 +303,7 @@ inline int realMain(int argc, char *argv[], MPI_Datatype MPI_TPE) {
     auto end = std::chrono::steady_clock::now();
 
     if (0 == mpi_rank)
-        printStats<tpe>(end - start, nIt, numPatches * mpi_size * nx * ny, tpeName, sizeof(tpe) + sizeof(tpe), 7);
+        printStats<tpe>(end - start, nIt, numPatches * mpi_size * (nx - 2) * (ny - 2), tpeName, sizeof(tpe) + sizeof(tpe), 7);
 
     for (auto i = 0; i < numPatches; ++i) {
         checkCudaError(cudaMemcpy(patches[i].u, patches[i].d_u, sizeof(tpe) * nx * ny, cudaMemcpyDeviceToHost));

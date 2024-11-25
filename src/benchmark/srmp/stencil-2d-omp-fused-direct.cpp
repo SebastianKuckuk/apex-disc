@@ -101,7 +101,7 @@ inline int realMain(int argc, char *argv[]) {
 
     auto end = std::chrono::steady_clock::now();
 
-    printStats<tpe>(end - start, nIt, numPatches * nx * ny, tpeName, sizeof(tpe) + sizeof(tpe), 7);
+    printStats<tpe>(end - start, nIt, numPatches * (nx - 2) * (ny - 2), tpeName, sizeof(tpe) + sizeof(tpe), 7);
 
     for (auto i = 0; i < numPatches; ++i) {
         #pragma omp target exit data map(from : u[i][0 : nx * ny], uNew[i][0 : nx * ny])
