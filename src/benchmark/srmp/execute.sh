@@ -45,6 +45,10 @@ for NX in 8192 2048 512 128; do
     $BUILD_DIR/stencil-2d-cuda-fused-direct-omp double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
 
     echo
+    echo "Executing CUDA Graph $PNX x $PNY : $NX x $NY"
+    $BUILD_DIR/stencil-2d-cuda-graph double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
+
+    echo
     echo "Executing OpenMP Fused Direct $PNX x $PNY : $NX x $NY"
     $BUILD_DIR/stencil-2d-omp-fused-direct double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $PNX $PNY
 

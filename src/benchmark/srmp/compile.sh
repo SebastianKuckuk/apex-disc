@@ -30,6 +30,9 @@ nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-cuda-fuse
 echo "Compiling CUDA Fused Direct OpenMP"
 nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -Xcompiler -fopenmp -o $BUILD_DIR/stencil-2d-cuda-fused-direct-omp stencil-2d-cuda-fused-direct-omp.cu
 
+echo "Compiling CUDA Graph"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -Xcompiler -fopenmp -o $BUILD_DIR/stencil-2d-cuda-graph stencil-2d-cuda-graph.cu
+
 echo "Compiling OpenMP Fused Direct"
 nvc++ -gpu=cc80 -O3 -std=c++17 -fopenmp -mp=gpu -target=gpu -o $BUILD_DIR/stencil-2d-omp-fused-direct stencil-2d-omp-fused-direct.cpp
 
