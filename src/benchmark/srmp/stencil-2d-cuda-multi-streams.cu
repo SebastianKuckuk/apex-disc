@@ -97,7 +97,7 @@ inline int realMain(int argc, char *argv[]) {
     checkCudaError(cudaMemcpy(d_d_uNew, h_d_uNew, sizeof(tpe *) * numPatches, cudaMemcpyHostToDevice));
 
     cudaStream_t *streams;
-    checkCudaError(cudaMallocHost((void **)&streams, sizeof(cudaStream_t) * numPatches));
+    checkCudaError(cudaMallocHost((void **)&streams, sizeof(cudaStream_t) * 5 * numPatches));
     for (auto i = 0; i < 5 * numPatches; ++i)
         checkCudaError(cudaStreamCreate(&streams[i]));
 
