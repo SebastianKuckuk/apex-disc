@@ -33,5 +33,13 @@ for NX in 8192 4096 2048 ; do
         echo
         echo "Executing CUDA Fused Direct Batched $MPINX x $MPINY : $PNX x $PNY : $NX x $NY"
         mpirun -n $((MPINX * MPINY)) $BUILD_DIR/stencil-2d-mpi-cuda-fused-direct-batched double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $MPINX $MPINY $PNX $PNY
+
+        echo
+        echo "Executing CUDA Fused Direct Graph $MPINX x $MPINY : $PNX x $PNY : $NX x $NY"
+        mpirun -n $((MPINX * MPINY)) $BUILD_DIR/stencil-2d-mpi-cuda-fused-direct-graph double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $MPINX $MPINY $PNX $PNY
+
+        echo
+        echo "Executing CUDA Fused Direct Graphs $MPINX x $MPINY : $PNX x $PNY : $NX x $NY"
+        mpirun -n $((MPINX * MPINY)) $BUILD_DIR/stencil-2d-mpi-cuda-fused-direct-graphs double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $MPINX $MPINY $PNX $PNY
     done
 done
