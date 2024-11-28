@@ -41,5 +41,17 @@ for NX in 8192 4096 2048 ; do
         echo
         echo "Executing CUDA Fused Direct Graphs $MPINX x $MPINY : $PNX x $PNY : $NX x $NY"
         mpirun -n $((MPINX * MPINY)) $BUILD_DIR/stencil-2d-mpi-cuda-fused-direct-graphs double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $MPINX $MPINY $PNX $PNY
+
+        echo
+        echo "Executing NCCL Base $MPINX x $MPINY : $PNX x $PNY : $NX x $NY"
+        mpirun -n $((MPINX * MPINY)) $BUILD_DIR/stencil-2d-nccl-cuda-base double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $MPINX $MPINY $PNX $PNY
+
+        echo
+        echo "Executing NCCL Multistream $MPINX x $MPINY : $PNX x $PNY : $NX x $NY"
+        mpirun -n $((MPINX * MPINY)) $BUILD_DIR/stencil-2d-nccl-cuda-multistream double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $MPINX $MPINY $PNX $PNY
+
+        echo
+        echo "Executing NCCL Fused Direct Streams $MPINX x $MPINY : $PNX x $PNY : $NX x $NY"
+        mpirun -n $((MPINX * MPINY)) $BUILD_DIR/stencil-2d-nccl-cuda-fused-direct-streams double $(($NX+2)) $(($NY+2)) $N_WARMUP $N_IT $MPINX $MPINY $PNX $PNY
     done
 done

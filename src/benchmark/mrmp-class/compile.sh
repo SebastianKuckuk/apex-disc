@@ -23,3 +23,15 @@ nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-mpi-cuda-
 
 echo "Compiling MPI CUDA Fused Direct Graphs"
 nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-mpi-cuda-fused-direct-graphs stencil-2d-mpi-cuda-fused-direct-graphs.cu
+
+echo "Compiling MPI CUDA Fused Direct Graph Callback"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-mpi-cuda-fused-direct-graph-callback stencil-2d-mpi-cuda-fused-direct-graph-callback.cu
+
+echo "Compiling NCCL CUDA Base"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-nccl-cuda-base stencil-2d-nccl-cuda-base.cu -lnccl
+
+echo "Compiling NCCL CUDA Multistream"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-nccl-cuda-multistream stencil-2d-nccl-cuda-multistream.cu -lnccl
+
+echo "Compiling NCCL CUDA Fused Direct Streams"
+nvcc -ccbin=mpic++ -arch=sm_80 -O3 -std=c++17 -o $BUILD_DIR/stencil-2d-nccl-cuda-fused-direct-streams stencil-2d-nccl-cuda-fused-direct-streams.cu -lnccl
