@@ -1,3 +1,5 @@
+#pragma once
+
 // exchange kernels
 
 template <typename tpe>

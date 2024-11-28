@@ -1,3 +1,5 @@
+#pragma once
+
 // packing kernels
 
 template <typename tpe>
