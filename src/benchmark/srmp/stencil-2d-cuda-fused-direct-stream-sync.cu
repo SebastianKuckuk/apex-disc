@@ -131,7 +131,7 @@ inline int realMain(int argc, char *argv[]) {
     cudaEvent_t *events;
     checkCudaError(cudaMallocHost((void **)&events, sizeof(cudaEvent_t) * (nIt + nItWarmUp) * patch_nx * patch_ny));
     for (auto i = 0; i < (nIt + nItWarmUp) * patch_nx * patch_ny; ++i)
-        checkCudaError(cudaEventCreate(&events[i]));
+        checkCudaError(cudaEventCreate(&events[i], cudaEventDisableTiming));
 
     // init
     initStencil2D(u, uNew, nx, ny, patch_nx, patch_ny);

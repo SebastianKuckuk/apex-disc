@@ -108,12 +108,12 @@ inline void performIteration(Patch<tpe> *patches, Patch<tpe> *d_patches, unsigne
         firstTime = false;
 
         cudaEvent_t branchEvent;
-        checkCudaError(cudaEventCreate(&branchEvent));
+        checkCudaError(cudaEventCreate(&branchEvent, cudaEventDisableTiming));
 
         cudaEvent_t *events;
         checkCudaError(cudaMallocHost((void **)&events, sizeof(cudaEvent_t) * numPatches));
         for (auto p = 0; p < numPatches; ++p)
-            checkCudaError(cudaEventCreate(&events[p]));
+            checkCudaError(cudaEventCreate(&events[p], cudaEventDisableTiming));
 
         checkCudaError(cudaStreamBeginCapture(streams[0], cudaStreamCaptureModeGlobal));
         checkCudaError(cudaEventRecord(branchEvent, streams[0]));
